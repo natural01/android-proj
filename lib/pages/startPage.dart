@@ -27,5 +27,3 @@ class CurrentCategoriePage extends StatelessWidget {
     );
   }
 }
-
-// привет от никиты

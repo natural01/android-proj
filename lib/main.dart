@@ -32,7 +32,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
-  final List<Widget> _widgetOptions = <Widget>[
+  bool enteredParameters = false;
+  late final List<Widget> _widgetOptions = <Widget>[
     const FirstScreenWidget(),
     const Text(
       'Index 1: Business',
@@ -52,21 +53,73 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xff3A4A66),
         title: const Text(
           'Place of interests',
           style: TextStyle(
-            color: Color(0xff2D2D2D),
+            color: Colors.white,
           ),
         ),
         actions: <Widget>[
           IconButton(
             icon: const Icon(
-              color: Colors.black,
+              color: Colors.white,
               Icons.settings,
             ),
             onPressed: () {
-              // do something
+              showDialog(
+                context: context,
+                builder: (_) => AlertDialog(
+                  title: const Text("Выберите местопопложение"),
+                  content: SingleChildScrollView(
+                    child: ListBody(
+                      children: const <Widget>[
+                        SizedBox(
+                          height: 20,
+                        ),
+                        TextField(
+                            decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          icon: Icon(Icons.place),
+                          hintText: "Выберите часть света",
+                        )),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        TextField(
+                            decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          icon: Icon(Icons.flag),
+                          hintText: "Выберите страну",
+                        )),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        TextField(
+                            decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          icon: Icon(Icons.build),
+                          hintText: "Выберите город",
+                        )),
+                      ],
+                    ),
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      child: const Text('Approve'),
+                      onPressed: () {
+                        enteredParameters = true;
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const CurrentCategoriePage(
+                                        titlePage: "current title")));
+                      },
+                    ),
+                  ],
+                ),
+              );
             },
           )
         ],
@@ -90,7 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: Colors.deepOrange[600],
         onTap: _onItemTapped,
       ),
     );
