@@ -1,24 +1,36 @@
+import 'package:data_bases_project/login/lendingPage.dart';
+import 'package:data_bases_project/login/userWidget.dart';
 import 'package:data_bases_project/pages/infoPage.dart';
-import 'package:data_bases_project/pages/startPage.dart';
-import 'package:flutter/material.dart';
 
-void main() {
+import 'package:data_bases_project/pages/startPage.dart';
+
+import 'package:data_bases_project/login/services/authServ.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return StreamProvider<UserWidget?>.value(
+      value: AuthSevrice().currentUser,
+      initialData: null,
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const LandingPage(),
       ),
-      home: const MyHomePage(),
     );
   }
 }
@@ -121,7 +133,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               );
             },
-          )
+          ),
+          IconButton(
+              onPressed: () {
+                AuthSevrice().logOut();
+              },
+              icon: const Icon(Icons.logout)),
         ],
         centerTitle: true,
       ),
