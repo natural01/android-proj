@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:data_bases_project/database/database.dart';
 import 'package:data_bases_project/login/services/authServ.dart';
 import 'package:data_bases_project/pages/infoPage.dart';
-import 'package:data_bases_project/pages/startPage.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:data_bases_project/pages/testDataPage.dart';
 import 'package:flutter/material.dart';
 
+CollectionReference _collectionRef =
+    FirebaseFirestore.instance.collection('Country');
 const List<String> list = <String>['Moscow', 'London', 'Rome', 'New Yourk'];
 
 class MyHomePage extends StatefulWidget {
@@ -18,9 +21,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool enteredParameters = false;
   late final List<Widget> _widgetOptions = <Widget>[
     const FirstScreenWidget(),
-    const Text(
-      'Index 1: Business',
-    ),
+    const TestDataWidget(),
     const Text(
       'Index 2: School',
     ),
@@ -75,15 +76,27 @@ class CustomBarWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            const Center(
-              child: Text(
-                'Where do you want to travel?',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+            Row(
+              children: [
+                const Center(
+                  child: Text(
+                    'Where do you want to travel?',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
-              ),
+                IconButton(
+                    onPressed: () {
+                      AuthSevrice().logOut();
+                    },
+                    icon: const Icon(
+                      Icons.logout,
+                      color: Colors.white,
+                    ))
+              ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
