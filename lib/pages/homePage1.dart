@@ -4,14 +4,14 @@ import 'package:data_bases_project/pages/infoPage.dart';
 import 'package:data_bases_project/pages/testDataPage.dart';
 import 'package:flutter/material.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class MyHomePage1 extends StatefulWidget {
+  const MyHomePage1({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyHomePage1> createState() => _MyHomePage1State();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePage1State extends State<MyHomePage1> {
   int _selectedIndex = 0;
   bool enteredParameters = false;
   late final List<Widget> _widgetOptions = <Widget>[
@@ -119,7 +119,7 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 190,
+        width: 170,
         height: 60,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(30),
@@ -146,13 +146,6 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
                 );
               }
               return DropdownButton(
-                hint: const Text(
-                  'Select Destination',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.white,
-                  ),
-                ),
                 value: selectedCurrency,
                 isExpanded: true,
                 dropdownColor: Color(0xff356dfa),
