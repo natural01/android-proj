@@ -1,30 +1,47 @@
+import 'package:data_bases_project/database/database.dart';
 import 'package:data_bases_project/pages/cityDescriprion.dart';
+import 'package:data_bases_project/pages/testDataPage.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class FirstScreenWidget extends StatelessWidget {
+class FirstScreenWidget extends StatefulWidget {
   const FirstScreenWidget({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<FirstScreenWidget> createState() => _FirstScreenWidgetState();
+}
+
+class _FirstScreenWidgetState extends State<FirstScreenWidget> {
+  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-        child: const CardWidget(
-            title: 'Moscow',
-            parentCountry: 'Russia',
-            comments: 'Test comment',
-            commentsAuthor: 'John Doe',
-            commentsRating: 4.5,
-            descriprion:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-            imageURL:
-                'https://upload.wikimedia.org/wikipedia/commons/8/85/Saint_Basil%27s_Cathedral_and_the_Red_Square.jpg'),
-      ),
+    return StreamBuilder<List<Town>>(
+      stream: readTown(context.watch<Data>().getData),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const Text('Something went wrong!');
+        } else if (context.watch<Data>().getData == '') {
+          return const AwaitWidget();
+        } else if (snapshot.hasData) {
+          final towns = snapshot.data!;
+          return ListView(
+            children: towns.map(builtCardWidget).toList(),
+          );
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
     );
   }
 }
+
+Widget builtCardWidget(Town town) => CardWidget(
+      title: town.name,
+      descriprion: town.description,
+      parentCountry: town.idCountry,
+      imageURL: town.pucture,
+    );
 
 class CardWidget extends StatelessWidget {
   final title;
@@ -41,9 +58,9 @@ class CardWidget extends StatelessWidget {
       required this.descriprion,
       required this.imageURL,
       required this.parentCountry,
-      required this.comments,
-      required this.commentsAuthor,
-      required this.commentsRating})
+      this.comments,
+      this.commentsAuthor,
+      this.commentsRating})
       : super(key: key);
 
   @override
@@ -97,6 +114,28 @@ class CardWidget extends StatelessWidget {
               ],
             ),
           )),
+    );
+  }
+}
+
+class AwaitWidget extends StatelessWidget {
+  const AwaitWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+      child: Expanded(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Text('Traveller'),
+              Text('Выберите страну'),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

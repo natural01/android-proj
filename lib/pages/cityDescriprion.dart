@@ -6,9 +6,9 @@ class CityDescriprionWidget extends StatelessWidget {
       required this.descriprion,
       required this.imageURL,
       required this.parentCounry,
-      required this.comments,
-      required this.commentsAuthor,
-      required this.commentsRating});
+      this.comments,
+      this.commentsAuthor,
+      this.commentsRating});
   final cityName;
   final descriprion;
   final imageURL;
@@ -26,158 +26,232 @@ class CityDescriprionWidget extends StatelessWidget {
               title: cityName,
               parentCountry: parentCounry,
             )),
-        body: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Included',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w800,
-                  color: Color(0xff151a22),
-                ),
-              ),
-              const Text(
-                'For more details press on the icons.',
-                style: TextStyle(fontSize: 18, color: Color(0xffaeb8c4)),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundColor: const Color(0xff356dfa),
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.hotel,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {},
-                    ),
-                  ),
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundColor: const Color(0xff356dfa),
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.hotel,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {},
-                    ),
-                  ),
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundColor: const Color(0xff356dfa),
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.hotel,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {},
-                    ),
-                  ),
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundColor: const Color(0xff356dfa),
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.hotel,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {},
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
-                'Description',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w800,
-                  color: Color(0xff151a22),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Color(0xffe8eef7),
-                ),
-                width: double.infinity,
-                child: Text(
-                  descriprion,
-                  style: const TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xff4a627f),
+        body: SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Included',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xff151a22),
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
-                'Rating & Reviews',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w800,
-                  color: Color(0xff151a22),
+                const Text(
+                  'For more details press on the icons.',
+                  style: TextStyle(fontSize: 18, color: Color(0xffaeb8c4)),
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Color(0xffe8eef7),
+                const SizedBox(
+                  height: 15,
                 ),
-                width: double.infinity,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          commentsAuthor,
-                          style: const TextStyle(
-                              fontSize: 20, color: Color(0xff8792a6)),
-                        ),
-                        Row(
-                          children: [
-                            const Icon(Icons.star, color: Color(0xffffb006)),
-                            Text(
-                              commentsRating.toString(),
-                              style: const TextStyle(
-                                  fontSize: 15, color: Color(0xff8792a6)),
+                    Container(
+                      child: Column(
+                        children: [
+                          SizedBox(height: 24),
+                          CircleAvatar(
+                            radius: 36,
+                            backgroundColor: const Color(0xff356dfa),
+                            child: CircleAvatar(
+                              radius: 33,
+                              backgroundColor: Colors.white,
+                              child: CircleAvatar(
+                                radius: 30,
+                                backgroundColor: const Color(0xff356dfa),
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.flight,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {},
+                                ),
+                              ),
                             ),
-                          ],
-                        ),
-                      ],
+                          ),
+                          SizedBox(height: 5),
+                          Text('Flight',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        ],
+                      ),
                     ),
-                    const SizedBox(
-                      height: 10,
+                    Container(
+                      child: Column(
+                        children: [
+                          SizedBox(height: 24),
+                          CircleAvatar(
+                            radius: 36,
+                            backgroundColor: const Color(0xff356dfa),
+                            child: CircleAvatar(
+                              radius: 33,
+                              backgroundColor: Colors.white,
+                              child: CircleAvatar(
+                                radius: 30,
+                                backgroundColor: const Color(0xff356dfa),
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.hotel,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {},
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Text('Hotel',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        ],
+                      ),
                     ),
-                    Text(
-                      descriprion,
-                      style: const TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xff4a627f),
+                    Container(
+                      child: Column(
+                        children: [
+                          SizedBox(height: 24),
+                          CircleAvatar(
+                            radius: 36,
+                            backgroundColor: const Color(0xff356dfa),
+                            child: CircleAvatar(
+                              radius: 33,
+                              backgroundColor: Colors.white,
+                              child: CircleAvatar(
+                                radius: 30,
+                                backgroundColor: const Color(0xff356dfa),
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.car_rental,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {},
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Text('Car',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      child: Column(
+                        children: [
+                          SizedBox(height: 24),
+                          CircleAvatar(
+                            radius: 36,
+                            backgroundColor: const Color(0xff356dfa),
+                            child: CircleAvatar(
+                              radius: 33,
+                              backgroundColor: Colors.white,
+                              child: CircleAvatar(
+                                radius: 30,
+                                backgroundColor: const Color(0xff356dfa),
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.tour,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {},
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Text('Tour',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        ],
                       ),
                     ),
                   ],
                 ),
-              )
-            ],
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'Description',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xff151a22),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: Color(0xffe8eef7),
+                  ),
+                  width: double.infinity,
+                  child: Text(
+                    descriprion,
+                    style: const TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      color: Color(0xff4a627f),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'Rating & Reviews',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xff151a22),
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    color: Color(0xffe8eef7),
+                  ),
+                  width: double.infinity,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            commentsAuthor ?? '',
+                            style: const TextStyle(
+                                fontSize: 20, color: Color(0xff8792a6)),
+                          ),
+                          Row(
+                            children: [
+                              const Icon(Icons.star, color: Color(0xffffb006)),
+                              Text(
+                                commentsRating.toString(),
+                                style: const TextStyle(
+                                    fontSize: 15, color: Color(0xff8792a6)),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        descriprion,
+                        style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xff4a627f),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ));
   }

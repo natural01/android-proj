@@ -3,6 +3,7 @@ import 'package:data_bases_project/login/services/authServ.dart';
 import 'package:data_bases_project/pages/infoPage.dart';
 import 'package:data_bases_project/pages/testDataPage.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -170,9 +171,10 @@ class _DropdownButtonExampleState extends State<DropdownButtonExample> {
                   height: 0,
                 ),
                 onChanged: (currencyValue) {
+                  context.read<Data>().changeData(currencyValue);
                   final snackBar = SnackBar(
                     content: Text(
-                      'You choosen country is $currencyValue',
+                      'You choosen country $currencyValue',
                       style: TextStyle(
                         color: Color(0xff11b719),
                       ),

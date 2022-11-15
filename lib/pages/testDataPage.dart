@@ -1,6 +1,18 @@
 import 'package:data_bases_project/database/database.dart';
 import 'package:flutter/material.dart';
 
+class Data with ChangeNotifier {
+  String _data = '';
+
+  String get getData => _data;
+
+  void changeData(String newData) {
+    _data = newData;
+
+    notifyListeners();
+  }
+}
+
 class TestDataWidget extends StatelessWidget {
   const TestDataWidget({super.key});
 

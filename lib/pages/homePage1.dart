@@ -15,7 +15,6 @@ class _MyHomePage1State extends State<MyHomePage1> {
   int _selectedIndex = 0;
   bool enteredParameters = false;
   late final List<Widget> _widgetOptions = <Widget>[
-    const FirstScreenWidget(),
     const TestDataWidget(),
     const Text(
       'Index 2: School',

@@ -1,6 +1,7 @@
 import 'package:data_bases_project/login/lendingPage.dart';
 import 'package:data_bases_project/login/userWidget.dart';
 import 'package:data_bases_project/login/services/authServ.dart';
+import 'package:data_bases_project/pages/testDataPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,13 +20,16 @@ class MyApp extends StatelessWidget {
     return StreamProvider<UserWidget?>.value(
       value: AuthSevrice().currentUser,
       initialData: null,
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+      child: ChangeNotifierProvider<Data>(
+        create: (context) => Data(),
+        child: MaterialApp(
+          title: 'Flutter Demo',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: const LandingPage(),
         ),
-        home: const LandingPage(),
       ),
     );
   }
