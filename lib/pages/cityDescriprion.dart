@@ -44,127 +44,24 @@ class CityDescriprionWidget extends StatelessWidget {
                   'For more details press on the icons.',
                   style: TextStyle(fontSize: 18, color: Color(0xffaeb8c4)),
                 ),
-                const SizedBox(
-                  height: 15,
-                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      child: Column(
-                        children: [
-                          SizedBox(height: 24),
-                          CircleAvatar(
-                            radius: 36,
-                            backgroundColor: const Color(0xff356dfa),
-                            child: CircleAvatar(
-                              radius: 33,
-                              backgroundColor: Colors.white,
-                              child: CircleAvatar(
-                                radius: 30,
-                                backgroundColor: const Color(0xff356dfa),
-                                child: IconButton(
-                                  icon: const Icon(
-                                    Icons.flight,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () {},
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Text('Flight',
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                        ],
-                      ),
+                  children: const [
+                    IncludedIconWidget(
+                      icon: Icons.flight,
+                      name: 'Flight',
                     ),
-                    Container(
-                      child: Column(
-                        children: [
-                          SizedBox(height: 24),
-                          CircleAvatar(
-                            radius: 36,
-                            backgroundColor: const Color(0xff356dfa),
-                            child: CircleAvatar(
-                              radius: 33,
-                              backgroundColor: Colors.white,
-                              child: CircleAvatar(
-                                radius: 30,
-                                backgroundColor: const Color(0xff356dfa),
-                                child: IconButton(
-                                  icon: const Icon(
-                                    Icons.hotel,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () {},
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Text('Hotel',
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                        ],
-                      ),
+                    IncludedIconWidget(
+                      icon: Icons.hotel,
+                      name: 'Hotel',
                     ),
-                    Container(
-                      child: Column(
-                        children: [
-                          SizedBox(height: 24),
-                          CircleAvatar(
-                            radius: 36,
-                            backgroundColor: const Color(0xff356dfa),
-                            child: CircleAvatar(
-                              radius: 33,
-                              backgroundColor: Colors.white,
-                              child: CircleAvatar(
-                                radius: 30,
-                                backgroundColor: const Color(0xff356dfa),
-                                child: IconButton(
-                                  icon: const Icon(
-                                    Icons.car_rental,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () {},
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Text('Car',
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                        ],
-                      ),
+                    IncludedIconWidget(
+                      icon: Icons.car_rental,
+                      name: 'Car rental',
                     ),
-                    Container(
-                      child: Column(
-                        children: [
-                          SizedBox(height: 24),
-                          CircleAvatar(
-                            radius: 36,
-                            backgroundColor: const Color(0xff356dfa),
-                            child: CircleAvatar(
-                              radius: 33,
-                              backgroundColor: Colors.white,
-                              child: CircleAvatar(
-                                radius: 30,
-                                backgroundColor: const Color(0xff356dfa),
-                                child: IconButton(
-                                  icon: const Icon(
-                                    Icons.tour,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () {},
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 5),
-                          Text('Tour',
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                        ],
-                      ),
+                    IncludedIconWidget(
+                      icon: Icons.tour,
+                      name: 'Tour',
                     ),
                   ],
                 ),
@@ -249,11 +146,137 @@ class CityDescriprionWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                )
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'Hotels',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xff151a22),
+                  ),
+                ),
+                Container(
+                    height: 140,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 5,
+                      itemBuilder: ((context, index) {
+                        return const HotelCardWidget();
+                      }),
+                    ))
               ],
             ),
           ),
         ));
+  }
+}
+
+class HotelCardWidget extends StatelessWidget {
+  const HotelCardWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.only(right: 10),
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        height: 140,
+        width: 140,
+        decoration: BoxDecoration(
+          image: const DecorationImage(
+              image: AssetImage('images/appBarHeader.png'), fit: BoxFit.cover),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 60,
+                  child: const Text('Name',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white)),
+                ),
+                Row(
+                  children: const [
+                    Icon(Icons.star, color: Color(0xffffb006)),
+                    Text('5', style: TextStyle(color: Color(0xffffb006))),
+                  ],
+                )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                      ),
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.black12)),
+                  child: const Text('More'),
+                )
+              ],
+            )
+          ],
+        ));
+  }
+}
+
+class IncludedIconWidget extends StatelessWidget {
+  final icon;
+  final name;
+  const IncludedIconWidget({
+    Key? key,
+    required this.icon,
+    required this.name,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          SizedBox(height: 24),
+          CircleAvatar(
+            radius: 36,
+            backgroundColor: const Color(0xff356dfa),
+            child: CircleAvatar(
+              radius: 33,
+              backgroundColor: Colors.white,
+              child: CircleAvatar(
+                radius: 30,
+                backgroundColor: const Color(0xff356dfa),
+                child: IconButton(
+                  icon: Icon(
+                    icon,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {},
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 5),
+          Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
+        ],
+      ),
+    );
   }
 }
 
@@ -285,12 +308,16 @@ class CustomCityBarWidget extends StatelessWidget {
                       icon: Icon(Icons.arrow_back),
                       color: Colors.white,
                     ),
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.white,
+                    Container(
+                      width: 210,
+                      child: Text(
+                        title,
+                        overflow: TextOverflow.clip,
+                        style: const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                        ),
                       ),
                     )
                   ],
