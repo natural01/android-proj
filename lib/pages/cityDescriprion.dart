@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../Widgets/Widgets.dart';
+
 class CityDescriprionWidget extends StatelessWidget {
   const CityDescriprionWidget(
       {required this.cityName,
@@ -166,7 +168,50 @@ class CityDescriprionWidget extends StatelessWidget {
                       itemBuilder: ((context, index) {
                         return const HotelCardWidget();
                       }),
-                    ))
+                    )
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'Restaurants',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xff151a22),
+                  ),
+                ),
+                Container(
+                    height: 140,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 5,
+                      itemBuilder: ((context, index) {
+                        return const RestaurantsWidget(img: '',name: '');
+                      }),
+                    )
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'Attraction',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xff151a22),
+                  ),
+                ),
+                Container(
+                    height: 140,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 5,
+                      itemBuilder: ((context, index) {
+                        return const AttractionWidget(img: '',name: '');
+                      }),
+                    )
+                )
               ],
             ),
           ),
@@ -235,48 +280,6 @@ class HotelCardWidget extends StatelessWidget {
             )
           ],
         ));
-  }
-}
-
-class IncludedIconWidget extends StatelessWidget {
-  final icon;
-  final name;
-  const IncludedIconWidget({
-    Key? key,
-    required this.icon,
-    required this.name,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          SizedBox(height: 24),
-          CircleAvatar(
-            radius: 36,
-            backgroundColor: const Color(0xff356dfa),
-            child: CircleAvatar(
-              radius: 33,
-              backgroundColor: Colors.white,
-              child: CircleAvatar(
-                radius: 30,
-                backgroundColor: const Color(0xff356dfa),
-                child: IconButton(
-                  icon: Icon(
-                    icon,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {},
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 5),
-          Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
-        ],
-      ),
-    );
   }
 }
 
