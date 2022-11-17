@@ -93,15 +93,14 @@ class _HotelDescriprionWidgetState extends State<HotelDescriprionWidget> {
                           image: NetworkImage(widget.imageURL),
                           fit: BoxFit.cover)),
                 ),
-                const SizedBox(
-                  height: 30,
-                ),
                 Container(
+                  height: 40,
+                  padding: EdgeInsets.symmetric(horizontal: 5),
                   color: Colors.white,
                   width: double.infinity,
                   child: Container(
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           widget.HotelName,
@@ -113,10 +112,8 @@ class _HotelDescriprionWidgetState extends State<HotelDescriprionWidget> {
                         ),
                         Container(
                           child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: const [
                                   Icon(Icons.star, color: Color(0xffffb006)),
                                   Text('5', style: TextStyle(color: Color(0xffffb006))),
@@ -131,13 +128,18 @@ class _HotelDescriprionWidgetState extends State<HotelDescriprionWidget> {
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Text(
-                      'ул. Пушкина, д. Колотушкина',
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black45,
+                  child: Row(
+                    children: const [
+                      Icon(Icons.place, size: 10),
+                      Text(
+                        'ул. Пушкина, д. Колотушкина',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black45,
+                        ),
                       ),
+                    ],
                   ),
                 ),
                 const SizedBox(
@@ -147,6 +149,7 @@ class _HotelDescriprionWidgetState extends State<HotelDescriprionWidget> {
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   color: Colors.white,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
                         'Description',
@@ -157,7 +160,6 @@ class _HotelDescriprionWidgetState extends State<HotelDescriprionWidget> {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
                           color: Color(0xffe8eef7),
@@ -176,12 +178,13 @@ class _HotelDescriprionWidgetState extends State<HotelDescriprionWidget> {
                   ),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 5,
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   color: Colors.white,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
                         'Rating & Reviews',
@@ -199,7 +202,6 @@ class _HotelDescriprionWidgetState extends State<HotelDescriprionWidget> {
                         ),
                         width: double.infinity,
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(
                               height: 10,
