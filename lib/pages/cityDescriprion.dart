@@ -1,6 +1,8 @@
 import 'package:data_bases_project/database/database.dart';
 import 'package:flutter/material.dart';
 
+import 'HotelDescriptionWidget.dart';
+
 class GetBoxOffset extends StatefulWidget {
   final Widget child;
   final Function(Offset offset) offset;
@@ -416,7 +418,16 @@ class HotelCardWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => HotelDescriprionWidget(
+                              imageURL: picture,
+                              descriprion: description,
+                              HotelName: name,
+                            )));
+                  },
                   style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
