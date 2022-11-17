@@ -1,6 +1,42 @@
+import 'package:data_bases_project/database/database.dart';
 import 'package:flutter/material.dart';
 
-class CityDescriprionWidget extends StatelessWidget {
+class GetBoxOffset extends StatefulWidget {
+  final Widget child;
+  final Function(Offset offset) offset;
+  const GetBoxOffset({super.key, required this.child, required this.offset});
+
+  @override
+  State<GetBoxOffset> createState() => _GetBoxOffsetState(this.child);
+}
+
+class _GetBoxOffsetState extends State<GetBoxOffset> {
+  final Widget child;
+  Offset offset = Offset(0.0, 0.0);
+  GlobalKey widgetKey = GlobalKey();
+
+  _GetBoxOffsetState(this.child);
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final box = widgetKey.currentContext?.findRenderObject() as RenderBox;
+      offset = box.localToGlobal(Offset.zero);
+      widget.offset(offset);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      key: widgetKey,
+      child: widget.child,
+    );
+  }
+}
+
+class CityDescriprionWidget extends StatefulWidget {
   const CityDescriprionWidget(
       {required this.cityName,
       required this.descriprion,
@@ -18,15 +54,34 @@ class CityDescriprionWidget extends StatelessWidget {
   final commentsRating;
 
   @override
+  State<CityDescriprionWidget> createState() => _CityDescriprionWidgetState();
+}
+
+class _CityDescriprionWidgetState extends State<CityDescriprionWidget> {
+  List<double> item = [];
+  late ScrollController scrollController;
+  double valueHotel = 0.0;
+  double valueRest = 0.0;
+  double valueAttract = 0.0;
+
+  @override
+  void initState() {
+    scrollController = ScrollController();
+    item = List.generate(4, (index) => index.toDouble());
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: PreferredSize(
             preferredSize: const Size.fromHeight(140),
             child: CustomCityBarWidget(
-              title: cityName,
-              parentCountry: parentCounry,
+              title: widget.cityName,
+              parentCountry: widget.parentCounry,
             )),
         body: SingleChildScrollView(
+          controller: scrollController,
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
             child: Column(
@@ -46,22 +101,30 @@ class CityDescriprionWidget extends StatelessWidget {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     IncludedIconWidget(
                       icon: Icons.flight,
                       name: 'Flight',
+                      scrollController: scrollController,
+                      value: valueAttract,
                     ),
                     IncludedIconWidget(
                       icon: Icons.hotel,
-                      name: 'Hotel',
+                      name: 'Hotels',
+                      scrollController: scrollController,
+                      value: valueHotel,
                     ),
                     IncludedIconWidget(
-                      icon: Icons.car_rental,
-                      name: 'Car rental',
+                      icon: Icons.restaurant,
+                      name: 'Restaurants',
+                      scrollController: scrollController,
+                      value: valueRest,
                     ),
                     IncludedIconWidget(
-                      icon: Icons.tour,
-                      name: 'Tour',
+                      icon: Icons.attractions,
+                      name: 'Attractions',
+                      scrollController: scrollController,
+                      value: valueAttract,
                     ),
                   ],
                 ),
@@ -84,7 +147,7 @@ class CityDescriprionWidget extends StatelessWidget {
                   ),
                   width: double.infinity,
                   child: Text(
-                    descriprion,
+                    widget.descriprion,
                     style: const TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w600,
@@ -117,7 +180,7 @@ class CityDescriprionWidget extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            commentsAuthor ?? '',
+                            widget.commentsAuthor ?? '',
                             style: const TextStyle(
                                 fontSize: 20, color: Color(0xff8792a6)),
                           ),
@@ -125,7 +188,7 @@ class CityDescriprionWidget extends StatelessWidget {
                             children: [
                               const Icon(Icons.star, color: Color(0xffffb006)),
                               Text(
-                                commentsRating.toString(),
+                                widget.commentsRating.toString(),
                                 style: const TextStyle(
                                     fontSize: 15, color: Color(0xff8792a6)),
                               ),
@@ -137,7 +200,7 @@ class CityDescriprionWidget extends StatelessWidget {
                         height: 10,
                       ),
                       Text(
-                        descriprion,
+                        widget.descriprion,
                         style: const TextStyle(
                           fontSize: 17,
                           fontWeight: FontWeight.w600,
@@ -158,15 +221,104 @@ class CityDescriprionWidget extends StatelessWidget {
                     color: Color(0xff151a22),
                   ),
                 ),
-                Container(
+                GetBoxOffset(
+                  offset: (offset) {
+                    valueHotel = offset.dy;
+                    IncludedIconWidget(
+                      icon: Icons.hotel,
+                      name: 'Hotels',
+                      scrollController: scrollController,
+                      value: valueHotel,
+                    );
+                  },
+                  child: StreamBuilder<List<Hotel>>(
+                      stream: readHotel(widget.cityName),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return const Text('Something went wrong!');
+                        } else if (snapshot.hasData) {
+                          final hotels = snapshot.data!;
+                          return Container(
+                            height: 140,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children:
+                                  hotels.map(builtHotleCardWidget).toList(),
+                            ),
+                          );
+                        } else {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                      }),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'Restaurants',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xff151a22),
+                  ),
+                ),
+                GetBoxOffset(
+                  offset: (offset) {
+                    valueRest = offset.dy;
+                    IncludedIconWidget(
+                      name: 'Attracrion',
+                      icon: Icons.abc,
+                      scrollController: scrollController,
+                      value: valueRest,
+                    );
+                  },
+                  child: Container(
                     height: 140,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: 5,
                       itemBuilder: ((context, index) {
-                        return const HotelCardWidget();
+                        return const RestaurantsWidget();
                       }),
-                    ))
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  'Attraction',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.w800,
+                    color: Color(0xff151a22),
+                  ),
+                ),
+                GetBoxOffset(
+                  offset: (offset) {
+                    valueAttract = offset.dy;
+                    IncludedIconWidget(
+                      name: 'Attracrion',
+                      icon: Icons.abc,
+                      scrollController: scrollController,
+                      value: valueAttract,
+                    );
+                  },
+                  child: Container(
+                    height: 140,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 5,
+                      itemBuilder: ((context, index) {
+                        return const AttractionWidget();
+                      }),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 500,
+                )
               ],
             ),
           ),
@@ -174,10 +326,22 @@ class CityDescriprionWidget extends StatelessWidget {
   }
 }
 
+Widget builtHotleCardWidget(Hotel hotel) => HotelCardWidget(
+      description: hotel.descriotion,
+      name: hotel.name,
+      picture: hotel.picture,
+    );
+
 class HotelCardWidget extends StatelessWidget {
+  final description;
+  final name;
+  final picture;
   const HotelCardWidget({
+    required this.description,
+    required this.name,
+    required this.picture,
     Key? key,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -187,8 +351,8 @@ class HotelCardWidget extends StatelessWidget {
         height: 140,
         width: 140,
         decoration: BoxDecoration(
-          image: const DecorationImage(
-              image: AssetImage('images/appBarHeader.png'), fit: BoxFit.cover),
+          image:
+              DecorationImage(image: NetworkImage(picture), fit: BoxFit.cover),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
@@ -200,10 +364,10 @@ class HotelCardWidget extends StatelessWidget {
               children: [
                 Container(
                   width: 60,
-                  child: const Text('Name',
+                  child: Text(name,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                           color: Colors.white)),
@@ -241,11 +405,13 @@ class HotelCardWidget extends StatelessWidget {
 class IncludedIconWidget extends StatelessWidget {
   final icon;
   final name;
-  const IncludedIconWidget({
-    Key? key,
-    required this.icon,
-    required this.name,
-  }) : super(key: key);
+  final scrollController;
+  double value;
+  IncludedIconWidget(
+      {required this.icon,
+      required this.name,
+      required this.scrollController,
+      required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -267,7 +433,11 @@ class IncludedIconWidget extends StatelessWidget {
                     icon,
                     color: Colors.white,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    scrollController.animateTo(value - 200.00,
+                        duration: const Duration(milliseconds: 400),
+                        curve: Curves.easeIn);
+                  },
                 ),
               ),
             ),
@@ -353,5 +523,130 @@ class CustomCityBarWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class RestaurantsWidget extends StatelessWidget {
+  const RestaurantsWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.only(right: 10),
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        height: 140,
+        width: 140,
+        decoration: BoxDecoration(
+          image: const DecorationImage(
+              image: AssetImage('images/appBarHeader.png'), fit: BoxFit.cover),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 60,
+                  child: const Text('Name',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white)),
+                ),
+                Row(
+                  children: const [
+                    Icon(Icons.star, color: Color(0xffffb006)),
+                    Text('5', style: TextStyle(color: Color(0xffffb006))),
+                  ],
+                )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                      ),
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.black12)),
+                  child: const Text('More'),
+                )
+              ],
+            )
+          ],
+        ));
+  }
+}
+
+// достопримечательности
+class AttractionWidget extends StatelessWidget {
+  const AttractionWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        margin: EdgeInsets.only(right: 10),
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        height: 140,
+        width: 140,
+        decoration: BoxDecoration(
+          image: const DecorationImage(
+              image: AssetImage('images/appBarHeader.png'), fit: BoxFit.cover),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 60,
+                  child: const Text('Name',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white)),
+                ),
+                Row(
+                  children: const [
+                    Icon(Icons.star, color: Color(0xffffb006)),
+                    Text('5', style: TextStyle(color: Color(0xffffb006))),
+                  ],
+                )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                      ),
+                      backgroundColor:
+                          MaterialStateProperty.all(Colors.black12)),
+                  child: const Text('More'),
+                )
+              ],
+            )
+          ],
+        ));
   }
 }

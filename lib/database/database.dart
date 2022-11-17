@@ -15,6 +15,37 @@ Stream<List<Town>> readTown(String countryName) => FirebaseFirestore.instance
     .map((snapshot) =>
         snapshot.docs.map((doc) => Country.fromJsonTown(doc.data())).toList());
 
+Stream<List<Hotel>> readHotel(String townName) => FirebaseFirestore.instance
+    .collection('Hotel')
+    .where('Id Town', isEqualTo: townName)
+    .snapshots()
+    .map((snapshot) =>
+        snapshot.docs.map((doc) => Hotel.fromJsonHotel(doc.data())).toList());
+
+class Hotel {
+  final String? descriotion;
+  final String? idTown;
+  final String? idPosition;
+  final String? name;
+  final String? picture;
+
+  Hotel({
+    required this.descriotion,
+    required this.idTown,
+    required this.idPosition,
+    required this.name,
+    required this.picture,
+  });
+
+  static Hotel fromJsonHotel(Map<String, dynamic> json) => Hotel(
+        descriotion: json['Description'] ?? '',
+        idTown: json['Id Town'] ?? '',
+        idPosition: json['Id position'] ?? '',
+        name: json['Name'] ?? '',
+        picture: json['Picture'] ?? '',
+      );
+}
+
 class Town {
   final String? description;
   final String? idCountry;
