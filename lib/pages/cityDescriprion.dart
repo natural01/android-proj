@@ -273,16 +273,25 @@ class _CityDescriprionWidgetState extends State<CityDescriprionWidget> {
                       value: valueRest,
                     );
                   },
-                  child: Container(
-                    height: 140,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 5,
-                      itemBuilder: ((context, index) {
-                        return const RestaurantsWidget();
+                  child: StreamBuilder<List<Cafe>>(
+                      stream: readCafe(widget.cityName),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return const Text('Something went wrong!');
+                        } else if (snapshot.hasData) {
+                          final cafes = snapshot.data!;
+                          return Container(
+                            height: 140,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: cafes.map(builtCafeCardWidget).toList(),
+                            ),
+                          );
+                        } else {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
                       }),
-                    ),
-                  ),
                 ),
                 const SizedBox(
                   height: 20,
@@ -305,16 +314,27 @@ class _CityDescriprionWidgetState extends State<CityDescriprionWidget> {
                       value: valueAttract,
                     );
                   },
-                  child: Container(
-                    height: 140,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 5,
-                      itemBuilder: ((context, index) {
-                        return const AttractionWidget();
+                  child: StreamBuilder<List<Attraction>>(
+                      stream: readAttraction(widget.cityName),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return const Text('Something went wrong!');
+                        } else if (snapshot.hasData) {
+                          final attraction = snapshot.data!;
+                          return Container(
+                            height: 140,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: attraction
+                                  .map(builtAttractionCardWidget)
+                                  .toList(),
+                            ),
+                          );
+                        } else {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
                       }),
-                    ),
-                  ),
                 ),
                 SizedBox(
                   height: 500,
@@ -326,10 +346,22 @@ class _CityDescriprionWidgetState extends State<CityDescriprionWidget> {
   }
 }
 
+Widget builtCafeCardWidget(Cafe cafe) => RestaurantsWidget(
+      description: cafe.descriotion,
+      name: cafe.name,
+      picture: cafe.picture,
+    );
+
 Widget builtHotleCardWidget(Hotel hotel) => HotelCardWidget(
       description: hotel.descriotion,
       name: hotel.name,
       picture: hotel.picture,
+    );
+
+Widget builtAttractionCardWidget(Attraction attraction) => AttractionWidget(
+      description: attraction.descriotion,
+      name: attraction.name,
+      picture: attraction.picture,
     );
 
 class HotelCardWidget extends StatelessWidget {
@@ -527,7 +559,14 @@ class CustomCityBarWidget extends StatelessWidget {
 }
 
 class RestaurantsWidget extends StatelessWidget {
-  const RestaurantsWidget({super.key});
+  final description;
+  final name;
+  final picture;
+  const RestaurantsWidget(
+      {super.key,
+      required this.description,
+      required this.name,
+      required this.picture});
 
   @override
   Widget build(BuildContext context) {
@@ -537,8 +576,8 @@ class RestaurantsWidget extends StatelessWidget {
         height: 140,
         width: 140,
         decoration: BoxDecoration(
-          image: const DecorationImage(
-              image: AssetImage('images/appBarHeader.png'), fit: BoxFit.cover),
+          image:
+              DecorationImage(image: NetworkImage(picture), fit: BoxFit.cover),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
@@ -550,10 +589,10 @@ class RestaurantsWidget extends StatelessWidget {
               children: [
                 Container(
                   width: 60,
-                  child: const Text('Name',
+                  child: Text(name,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                           color: Colors.white)),
@@ -590,7 +629,14 @@ class RestaurantsWidget extends StatelessWidget {
 
 // достопримечательности
 class AttractionWidget extends StatelessWidget {
-  const AttractionWidget({super.key});
+  final description;
+  final name;
+  final picture;
+  const AttractionWidget(
+      {super.key,
+      required this.description,
+      required this.name,
+      required this.picture});
 
   @override
   Widget build(BuildContext context) {
@@ -600,8 +646,8 @@ class AttractionWidget extends StatelessWidget {
         height: 140,
         width: 140,
         decoration: BoxDecoration(
-          image: const DecorationImage(
-              image: AssetImage('images/appBarHeader.png'), fit: BoxFit.cover),
+          image:
+              DecorationImage(image: NetworkImage(picture), fit: BoxFit.cover),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
@@ -613,10 +659,10 @@ class AttractionWidget extends StatelessWidget {
               children: [
                 Container(
                   width: 60,
-                  child: const Text('Name',
+                  child: Text(name,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
-                      style: TextStyle(
+                      style: const TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                           color: Colors.white)),

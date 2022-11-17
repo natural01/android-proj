@@ -22,6 +22,22 @@ Stream<List<Hotel>> readHotel(String townName) => FirebaseFirestore.instance
     .map((snapshot) =>
         snapshot.docs.map((doc) => Hotel.fromJsonHotel(doc.data())).toList());
 
+Stream<List<Cafe>> readCafe(String townName) => FirebaseFirestore.instance
+    .collection('Cafe')
+    .where('Id town', isEqualTo: townName)
+    .snapshots()
+    .map((snapshot) =>
+        snapshot.docs.map((doc) => Cafe.fromJsonCafe(doc.data())).toList());
+
+Stream<List<Attraction>> readAttraction(String townName) =>
+    FirebaseFirestore.instance
+        .collection('Sight')
+        .where('Id town', isEqualTo: townName)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => Attraction.fromJsonAttraction(doc.data()))
+            .toList());
+
 class Hotel {
   final String? descriotion;
   final String? idTown;
@@ -41,6 +57,54 @@ class Hotel {
         descriotion: json['Description'] ?? '',
         idTown: json['Id Town'] ?? '',
         idPosition: json['Id position'] ?? '',
+        name: json['Name'] ?? '',
+        picture: json['Picture'] ?? '',
+      );
+}
+
+class Cafe {
+  final String? descriotion;
+  final String? idTown;
+  final int? idPosition;
+  final String? name;
+  final String? picture;
+
+  Cafe({
+    required this.descriotion,
+    required this.idTown,
+    required this.idPosition,
+    required this.name,
+    required this.picture,
+  });
+
+  static Cafe fromJsonCafe(Map<String, dynamic> json) => Cafe(
+        descriotion: json['Description'] ?? '',
+        idTown: json['Id town'] ?? '',
+        idPosition: json['Id position'] ?? 0,
+        name: json['Name'] ?? '',
+        picture: json['Picture'] ?? '',
+      );
+}
+
+class Attraction {
+  final String? descriotion;
+  final String? idTown;
+  final int? idPosition;
+  final String? name;
+  final String? picture;
+
+  Attraction({
+    required this.descriotion,
+    required this.idTown,
+    required this.idPosition,
+    required this.name,
+    required this.picture,
+  });
+
+  static Attraction fromJsonAttraction(Map<String, dynamic> json) => Attraction(
+        descriotion: json['Description'] ?? '',
+        idTown: json['Id Town'] ?? '',
+        idPosition: json['Id position'] ?? 0,
         name: json['Name'] ?? '',
         picture: json['Picture'] ?? '',
       );
