@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data_bases_project/database/database.dart';
 import 'package:data_bases_project/login/services/authServ.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -46,6 +47,7 @@ class CityDescriprionWidget extends StatefulWidget {
       required this.descriprion,
       required this.imageURL,
       required this.parentCounry,
+      required this.isFavorite,
       this.comments,
       this.commentsAuthor,
       this.commentsRating});
@@ -53,6 +55,7 @@ class CityDescriprionWidget extends StatefulWidget {
   final descriprion;
   final imageURL;
   final parentCounry;
+  final isFavorite;
   final comments;
   final commentsAuthor;
   final commentsRating;
@@ -67,10 +70,11 @@ class _CityDescriprionWidgetState extends State<CityDescriprionWidget> {
   double valueHotel = 0.0;
   double valueRest = 0.0;
   double valueAttract = 0.0;
-  final User? user = fAuth.currentUser;
+  bool isFavorite = false;
 
   @override
   void initState() {
+    isFavorite = widget.isFavorite;
     scrollController = ScrollController();
     item = List.generate(4, (index) => index.toDouble());
     super.initState();
@@ -99,15 +103,37 @@ class _CityDescriprionWidgetState extends State<CityDescriprionWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: const Icon(
-                          Icons.arrow_back,
-                          size: 35,
-                        ),
-                        color: Colors.white,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(
+                              Icons.arrow_back,
+                              size: 35,
+                            ),
+                            color: Colors.white,
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                if (isFavorite == true) {
+                                  final docTown = FirebaseFirestore.instance.collection('Town').doc(widget.cityName);
+                                  docTown.update({'isFavorite':false});
+                                  isFavorite = false;
+                                } else {
+                                  final docTown = FirebaseFirestore.instance.collection('Town').doc(widget.cityName);
+                                  docTown.update({'isFavorite':true});
+                                  isFavorite = true;
+                                }
+                              });
+                            },
+                            icon: const Icon(Icons.favorite),
+                            color: isFavorite ? Colors.red : Colors.white,
+                          ),
+                        ],
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

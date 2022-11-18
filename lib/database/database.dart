@@ -23,6 +23,13 @@ Stream<List<Town>> readTown(String countryName) => FirebaseFirestore.instance
     .map((snapshot) =>
         snapshot.docs.map((doc) => Country.fromJsonTown(doc.data())).toList());
 
+Stream<List<Town>> readFavoriteCities() => FirebaseFirestore.instance
+    .collection('Town')
+    .where('isFavorite', isEqualTo: true)
+    .snapshots()
+    .map((snapshot) =>
+      snapshot.docs.map((doc) => Country.fromJsonTown(doc.data())).toList());
+
 Stream<List<Hotel>> readHotel(String townName) => FirebaseFirestore.instance
     .collection('Hotel')
     .where('Id Town', isEqualTo: townName)
@@ -123,12 +130,14 @@ class Town {
   final String? idCountry;
   final String? name;
   final String? pucture;
+  final bool? isFavorite;
 
   Town({
     required this.description,
     required this.idCountry,
     required this.name,
     required this.pucture,
+    required this.isFavorite,
   });
 }
 
@@ -164,5 +173,6 @@ class Country {
         idCountry: json['Id country'] ?? '',
         name: json['Name'] ?? '',
         pucture: json['Picture'] ?? '',
+        isFavorite: json['isFavorite'] ?? false
       );
 }

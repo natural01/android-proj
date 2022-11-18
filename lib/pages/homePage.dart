@@ -5,6 +5,8 @@ import 'package:data_bases_project/pages/testDataPage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'favoriteCities.dart';
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
 
@@ -18,9 +20,7 @@ class _MyHomePageState extends State<MyHomePage> {
   late final List<Widget> _widgetOptions = <Widget>[
     const FirstScreenWidget(),
     const TestDataWidget(),
-    const Text(
-      'Index 2: School',
-    ),
+    const FavoriteCitiesWidget(),
   ];
 
   void _onItemTapped(int index) {
@@ -46,8 +46,8 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Map',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.route),
-            label: 'Route',
+            icon: Icon(Icons.favorite),
+            label: 'Favorite',
           ),
         ],
         currentIndex: _selectedIndex,

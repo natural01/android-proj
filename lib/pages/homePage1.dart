@@ -4,6 +4,8 @@ import 'package:data_bases_project/pages/infoPage.dart';
 import 'package:data_bases_project/pages/testDataPage.dart';
 import 'package:flutter/material.dart';
 
+import 'favoriteCities.dart';
+
 class MyHomePage1 extends StatefulWidget {
   const MyHomePage1({super.key});
 
@@ -16,9 +18,7 @@ class _MyHomePage1State extends State<MyHomePage1> {
   bool enteredParameters = false;
   late final List<Widget> _widgetOptions = <Widget>[
     const TestDataWidget(),
-    const Text(
-      'Index 2: School',
-    ),
+    const FavoriteCitiesWidget(),
   ];
 
   void _onItemTapped(int index) {
