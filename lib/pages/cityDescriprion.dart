@@ -76,164 +76,219 @@ class _CityDescriprionWidgetState extends State<CityDescriprionWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(140),
-            child: CustomCityBarWidget(
-              title: widget.cityName,
-              parentCountry: widget.parentCounry,
-            )),
         body: SingleChildScrollView(
-          controller: scrollController,
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Included',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w800,
-                    color: Color(0xff151a22),
-                  ),
-                ),
-                const Text(
-                  'For more details press on the icons.',
-                  style: TextStyle(fontSize: 18, color: Color(0xffaeb8c4)),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IncludedIconWidget(
-                      icon: Icons.flight,
-                      name: 'Flight',
-                      scrollController: scrollController,
-                      value: valueAttract,
-                    ),
-                    IncludedIconWidget(
-                      icon: Icons.hotel,
-                      name: 'Hotels',
-                      scrollController: scrollController,
-                      value: valueHotel,
-                    ),
-                    IncludedIconWidget(
-                      icon: Icons.restaurant,
-                      name: 'Restaurants',
-                      scrollController: scrollController,
-                      value: valueRest,
-                    ),
-                    IncludedIconWidget(
-                      icon: Icons.attractions,
-                      name: 'Attractions',
-                      scrollController: scrollController,
-                      value: valueAttract,
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  'Description',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w800,
-                    color: Color(0xff151a22),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  decoration: BoxDecoration(
+      controller: scrollController,
+      child: Container(
+        child: Column(
+          children: [
+            Container(
+                height: 300,
+                width: double.infinity,
+                decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    color: Color(0xffe8eef7),
-                  ),
-                  width: double.infinity,
-                  child: Text(
-                    widget.descriprion,
-                    style: const TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xff4a627f),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  'Rating & Reviews',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w800,
-                    color: Color(0xff151a22),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: Color(0xffe8eef7),
-                  ),
-                  width: double.infinity,
+                    image: DecorationImage(
+                        image: NetworkImage(widget.imageURL),
+                        fit: BoxFit.cover)),
+                child: Container(
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 15),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          size: 35,
+                        ),
+                        color: Colors.white,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.commentsAuthor ?? '',
+                            widget.cityName,
                             style: const TextStyle(
-                                fontSize: 20, color: Color(0xff8792a6)),
+                              fontSize: 30,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Icon(Icons.star, color: Color(0xffffb006)),
-                              Text(
-                                widget.commentsRating.toString(),
-                                style: const TextStyle(
-                                    fontSize: 15, color: Color(0xff8792a6)),
-                              ),
+                              Text(widget.parentCounry,
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                  )),
+                              const Icon(
+                                Icons.location_city,
+                                size: 35,
+                                color: Colors.white,
+                              )
                             ],
                           ),
                         ],
+                      )
+                    ],
+                  ),
+                )),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Included',
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xff151a22),
+                    ),
+                  ),
+                  const Text(
+                    'For more details press on the icons.',
+                    style: TextStyle(fontSize: 18, color: Color(0xffaeb8c4)),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IncludedIconWidget(
+                        icon: Icons.flight,
+                        name: 'Flight',
+                        scrollController: scrollController,
+                        value: valueAttract,
                       ),
-                      const SizedBox(
-                        height: 10,
+                      IncludedIconWidget(
+                        icon: Icons.hotel,
+                        name: 'Hotels',
+                        scrollController: scrollController,
+                        value: valueHotel,
                       ),
-                      Text(
-                        widget.descriprion,
-                        style: const TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xff4a627f),
-                        ),
+                      IncludedIconWidget(
+                        icon: Icons.restaurant,
+                        name: 'Restaurants',
+                        scrollController: scrollController,
+                        value: valueRest,
+                      ),
+                      IncludedIconWidget(
+                        icon: Icons.attractions,
+                        name: 'Attractions',
+                        scrollController: scrollController,
+                        value: valueAttract,
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  'Hotels',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w800,
-                    color: Color(0xff151a22),
+                  const SizedBox(
+                    height: 20,
                   ),
-                ),
-                GetBoxOffset(
-                  offset: (offset) {
-                    valueHotel = offset.dy;
-                    IncludedIconWidget(
-                      icon: Icons.hotel,
-                      name: 'Hotels',
-                      scrollController: scrollController,
-                      value: valueHotel,
-                    );
-                  },
-                  child: StreamBuilder<List<Hotel>>(
+                  const Text(
+                    'Description',
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xff151a22),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      color: Color(0xffe8eef7),
+                    ),
+                    width: double.infinity,
+                    child: Text(
+                      widget.descriprion,
+                      style: const TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xff4a627f),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Text(
+                    'Rating & Reviews',
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xff151a22),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      color: Color(0xffe8eef7),
+                    ),
+                    width: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              widget.commentsAuthor ?? '',
+                              style: const TextStyle(
+                                  fontSize: 20, color: Color(0xff8792a6)),
+                            ),
+                            Row(
+                              children: [
+                                const Icon(Icons.star,
+                                    color: Color(0xffffb006)),
+                                Text(
+                                  widget.commentsRating.toString(),
+                                  style: const TextStyle(
+                                      fontSize: 15, color: Color(0xff8792a6)),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          widget.descriprion,
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xff4a627f),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  GetBoxOffset(
+                    offset: (offset) {
+                      valueHotel = offset.dy;
+                      IncludedIconWidget(
+                        name: 'Hotels',
+                        icon: Icons.abc,
+                        scrollController: scrollController,
+                        value: valueHotel,
+                      );
+                    },
+                    child: const Text(
+                      'Hotels',
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xff151a22),
+                      ),
+                    ),
+                  ),
+                  StreamBuilder<List<Hotel>>(
                       stream: readHotel(widget.cityName),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
@@ -253,29 +308,29 @@ class _CityDescriprionWidgetState extends State<CityDescriprionWidget> {
                               child: CircularProgressIndicator());
                         }
                       }),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  'Restaurants',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w800,
-                    color: Color(0xff151a22),
+                  const SizedBox(
+                    height: 20,
                   ),
-                ),
-                GetBoxOffset(
-                  offset: (offset) {
-                    valueRest = offset.dy;
-                    IncludedIconWidget(
-                      name: 'Attracrion',
-                      icon: Icons.abc,
-                      scrollController: scrollController,
-                      value: valueRest,
-                    );
-                  },
-                  child: StreamBuilder<List<Cafe>>(
+                  GetBoxOffset(
+                    offset: (offset) {
+                      valueRest = offset.dy;
+                      IncludedIconWidget(
+                        name: 'Restaurants',
+                        icon: Icons.abc,
+                        scrollController: scrollController,
+                        value: valueRest,
+                      );
+                    },
+                    child: const Text(
+                      'Restaurants',
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xff151a22),
+                      ),
+                    ),
+                  ),
+                  StreamBuilder<List<Cafe>>(
                       stream: readCafe(widget.cityName),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
@@ -294,29 +349,29 @@ class _CityDescriprionWidgetState extends State<CityDescriprionWidget> {
                               child: CircularProgressIndicator());
                         }
                       }),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                const Text(
-                  'Attraction',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.w800,
-                    color: Color(0xff151a22),
+                  const SizedBox(
+                    height: 20,
                   ),
-                ),
-                GetBoxOffset(
-                  offset: (offset) {
-                    valueAttract = offset.dy;
-                    IncludedIconWidget(
-                      name: 'Attracrion',
-                      icon: Icons.abc,
-                      scrollController: scrollController,
-                      value: valueAttract,
-                    );
-                  },
-                  child: StreamBuilder<List<Attraction>>(
+                  GetBoxOffset(
+                    offset: (offset) {
+                      valueAttract = offset.dy;
+                      IncludedIconWidget(
+                        name: 'Attraction',
+                        icon: Icons.abc,
+                        scrollController: scrollController,
+                        value: valueAttract,
+                      );
+                    },
+                    child: const Text(
+                      'Attraction',
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xff151a22),
+                      ),
+                    ),
+                  ),
+                  StreamBuilder<List<Attraction>>(
                       stream: readAttraction(widget.cityName),
                       builder: (context, snapshot) {
                         if (snapshot.hasError) {
@@ -337,14 +392,16 @@ class _CityDescriprionWidgetState extends State<CityDescriprionWidget> {
                               child: CircularProgressIndicator());
                         }
                       }),
-                ),
-                SizedBox(
-                  height: 500,
-                )
-              ],
+                  SizedBox(
+                    height: 1000,
+                  )
+                ],
+              ),
             ),
-          ),
-        ));
+          ],
+        ),
+      ),
+    ));
   }
 }
 
@@ -358,6 +415,7 @@ Widget builtHotleCardWidget(Hotel hotel) => HotelCardWidget(
       description: hotel.descriotion,
       name: hotel.name,
       picture: hotel.picture,
+      rating: hotel.rating,
     );
 
 Widget builtAttractionCardWidget(Attraction attraction) => AttractionWidget(
@@ -370,18 +428,20 @@ class HotelCardWidget extends StatelessWidget {
   final description;
   final name;
   final picture;
+  final rating;
   const HotelCardWidget({
     required this.description,
     required this.name,
     required this.picture,
+    required this.rating,
     Key? key,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(right: 10),
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        margin: const EdgeInsets.only(right: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         height: 140,
         width: 140,
         decoration: BoxDecoration(
@@ -407,9 +467,14 @@ class HotelCardWidget extends StatelessWidget {
                           color: Colors.white)),
                 ),
                 Row(
-                  children: const [
-                    Icon(Icons.star, color: Color(0xffffb006)),
-                    Text('5', style: TextStyle(color: Color(0xffffb006))),
+                  children: [
+                    const Icon(Icons.star, color: Color(0xffffb006)),
+                    Text(rating,
+                        style: const TextStyle(
+                          color: Color(0xffffb006),
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        )),
                   ],
                 )
               ],
@@ -423,10 +488,10 @@ class HotelCardWidget extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => HotelDescriprionWidget(
-                              imageURL: picture,
-                              descriprion: description,
-                              HotelName: name,
-                            )));
+                                  imageURL: picture,
+                                  descriprion: description,
+                                  HotelName: name,
+                                )));
                   },
                   style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -477,7 +542,7 @@ class IncludedIconWidget extends StatelessWidget {
                     color: Colors.white,
                   ),
                   onPressed: () {
-                    scrollController.animateTo(value - 200.00,
+                    scrollController.animateTo(value,
                         duration: const Duration(milliseconds: 400),
                         curve: Curves.easeIn);
                   },

@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
 
 Stream<List<Country>> readCountry() => FirebaseFirestore.instance
     .collection('Country')
@@ -41,24 +40,24 @@ Stream<List<Attraction>> readAttraction(String townName) =>
 class Hotel {
   final String? descriotion;
   final String? idTown;
-  final String? idPosition;
   final String? name;
   final String? picture;
+  final String? rating;
 
   Hotel({
     required this.descriotion,
     required this.idTown,
-    required this.idPosition,
     required this.name,
     required this.picture,
+    required this.rating,
   });
 
   static Hotel fromJsonHotel(Map<String, dynamic> json) => Hotel(
         descriotion: json['Description'] ?? '',
         idTown: json['Id Town'] ?? '',
-        idPosition: json['Id position'] ?? '',
         name: json['Name'] ?? '',
         picture: json['Picture'] ?? '',
+        rating: json['Rating'] ?? '*',
       );
 }
 
