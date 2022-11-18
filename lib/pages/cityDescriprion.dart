@@ -392,9 +392,6 @@ class _CityDescriprionWidgetState extends State<CityDescriprionWidget> {
                               child: CircularProgressIndicator());
                         }
                       }),
-                  SizedBox(
-                    height: 1000,
-                  )
                 ],
               ),
             ),
