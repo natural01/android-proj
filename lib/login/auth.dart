@@ -13,9 +13,11 @@ class AuthorizationWidget extends StatefulWidget {
 class _AuthorizationWidgetState extends State<AuthorizationWidget> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
 
   String _email = '';
   String _password = '';
+  String _name = '';
   bool showLogin = true;
 
   AuthSevrice _authService = AuthSevrice();
@@ -85,12 +87,55 @@ class _AuthorizationWidgetState extends State<AuthorizationWidget> {
       );
     }
 
-    Widget _form(String label, void func()) {
+    Widget _loginForm(String label, void func()) {
       return Container(
         child: Column(
           children: [
             Padding(
               padding: const EdgeInsets.only(bottom: 20, top: 10),
+              child: _input(
+                const Icon(Icons.email),
+                "Email",
+                _emailController,
+                false,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: _input(const Icon(Icons.lock), "Password",
+                  _passwordController, true),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: SizedBox(
+                height: 50,
+                width: MediaQuery.of(context).size.width,
+                child: _button(label, func),
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
+    Widget _registerForm(String label, void func()) {
+      return Container(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20, top: 10),
+              child: _input(
+                const Icon(Icons.person),
+                "Name",
+                _nameController,
+                false,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20),
               child: _input(
                 const Icon(Icons.email),
                 "Email",
@@ -143,13 +188,14 @@ class _AuthorizationWidgetState extends State<AuthorizationWidget> {
     }
 
     void _registerButtonAction() async {
+      _name = _nameController.text;
       _email = _emailController.text;
       _password = _passwordController.text;
 
-      if (_email.isEmpty || _password.isEmpty) return;
+      if (_email.isEmpty || _password.isEmpty || _name.isEmpty) return;
 
       UserWidget? user = await _authService.registerWithEmailAndPassword(
-          _email.trim(), _password.trim());
+          _email.trim(), _password.trim(), _name.trim());
       if (user == null) {
         Fluttertoast.showToast(
             msg: "Can't Register you! Please check your email/password",
@@ -162,6 +208,7 @@ class _AuthorizationWidgetState extends State<AuthorizationWidget> {
       } else {
         _emailController.clear();
         _passwordController.clear();
+        _nameController.clear();
       }
     }
 
@@ -191,7 +238,7 @@ class _AuthorizationWidgetState extends State<AuthorizationWidget> {
           (showLogin
               ? Column(
                   children: [
-                    _form('LOGIN', _loginButtonAction),
+                    _loginForm('LOGIN', _loginButtonAction),
                     Padding(
                       padding: const EdgeInsets.all(10),
                       child: GestureDetector(
@@ -211,7 +258,7 @@ class _AuthorizationWidgetState extends State<AuthorizationWidget> {
                 )
               : Column(
                   children: [
-                    _form('REGISTER', _registerButtonAction),
+                    _registerForm('REGISTER', _registerButtonAction),
                     Padding(
                       padding: const EdgeInsets.all(10),
                       child: GestureDetector(

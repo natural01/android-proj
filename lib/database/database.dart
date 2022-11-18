@@ -1,4 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+final FirebaseAuth auth = FirebaseAuth.instance;
+
+User? inputData() {
+  final User? user = auth.currentUser;
+  final uid = user?.uid;
+  return user;
+}
 
 Stream<List<Country>> readCountry() => FirebaseFirestore.instance
     .collection('Country')

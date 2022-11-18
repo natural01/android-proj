@@ -1,6 +1,8 @@
 import 'package:data_bases_project/database/database.dart';
+import 'package:data_bases_project/login/services/authServ.dart';
 import 'package:data_bases_project/pages/cityDescriprion.dart';
 import 'package:data_bases_project/pages/testDataPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,7 +24,7 @@ class _FirstScreenWidgetState extends State<FirstScreenWidget> {
         if (snapshot.hasError) {
           return const Text('Something went wrong!');
         } else if (context.watch<Data>().getData == '') {
-          return const AwaitWidget();
+          return AwaitWidget();
         } else if (snapshot.hasData) {
           final towns = snapshot.data!;
           return ListView(
@@ -120,7 +122,9 @@ class CardWidget extends StatelessWidget {
 }
 
 class AwaitWidget extends StatelessWidget {
-  const AwaitWidget({super.key});
+  final User? user = fAuth.currentUser;
+
+  AwaitWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +134,8 @@ class AwaitWidget extends StatelessWidget {
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
+              Text(user.toString()),
               Text('Traveller'),
               Text('Выберите страну'),
             ],

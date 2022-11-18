@@ -1,4 +1,6 @@
 import 'package:data_bases_project/database/database.dart';
+import 'package:data_bases_project/login/services/authServ.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'HotelDescriptionWidget.dart';
@@ -65,6 +67,7 @@ class _CityDescriprionWidgetState extends State<CityDescriprionWidget> {
   double valueHotel = 0.0;
   double valueRest = 0.0;
   double valueAttract = 0.0;
+  final User? user = fAuth.currentUser;
 
   @override
   void initState() {
@@ -231,48 +234,64 @@ class _CityDescriprionWidgetState extends State<CityDescriprionWidget> {
                     ),
                   ),
                   Container(
+                    height: 200,
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       color: Color(0xffe8eef7),
                     ),
-                    width: double.infinity,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              widget.commentsAuthor ?? '',
-                              style: const TextStyle(
-                                  fontSize: 20, color: Color(0xff8792a6)),
-                            ),
-                            Row(
-                              children: [
-                                const Icon(Icons.star,
-                                    color: Color(0xffffb006)),
-                                Text(
-                                  widget.commentsRating.toString(),
-                                  style: const TextStyle(
-                                      fontSize: 15, color: Color(0xff8792a6)),
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 5,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          margin: EdgeInsets.only(left: 10),
+                          width: 300,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    // widget.commentsAuthor ?? '',
+                                    user!.displayName
+                                        .toString(), //Дергать из бд конекретный displayName
+                                    style: const TextStyle(
+                                        fontSize: 20, color: Color(0xff8792a6)),
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.star,
+                                          color: Color(0xffffb006)),
+                                      Text(
+                                        widget.commentsRating.toString(),
+                                        style: const TextStyle(
+                                            fontSize: 15,
+                                            color: Color(0xff8792a6)),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              const Text(
+                                'A city-state located on islands in Southeast Asia, separated from the southern tip of the Malacca Peninsula by the narrow Strait of Johor. It borders with the Sultanate of Johor, which is part of Malaysia, and with the province of Riau Island, which is part of Indonesia. Singapore is considered the second safest city on Earth after Tokyo.',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 7,
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xff4a627f),
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          widget.descriprion,
-                          style: const TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xff4a627f),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(
@@ -559,82 +578,6 @@ class IncludedIconWidget extends StatelessWidget {
           const SizedBox(height: 5),
           Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
         ],
-      ),
-    );
-  }
-}
-
-class CustomCityBarWidget extends StatelessWidget {
-  final title;
-  final parentCountry;
-  CustomCityBarWidget({required this.title, required this.parentCountry});
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        padding: EdgeInsets.symmetric(vertical: 30, horizontal: 15),
-        color: Color(0xff1b3065),
-        width: double.infinity,
-        height: 160.0,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(Icons.arrow_back),
-                      color: Colors.white,
-                    ),
-                    Container(
-                      width: 210,
-                      child: Text(
-                        title,
-                        overflow: TextOverflow.clip,
-                        style: const TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.favorite),
-                      color: Colors.white,
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.settings),
-                      color: Colors.white,
-                    )
-                  ],
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 50),
-              child: Text(
-                parentCountry,
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.white,
-                ),
-              ),
-            )
-          ],
-        ),
       ),
     );
   }
