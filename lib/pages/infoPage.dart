@@ -81,6 +81,7 @@ class CardWidget extends StatelessWidget {
                     )));
       },
       child: Container(
+          margin: const EdgeInsets.only(top: 12),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
               image: DecorationImage(

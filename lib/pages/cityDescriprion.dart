@@ -120,11 +120,20 @@ class _CityDescriprionWidgetState extends State<CityDescriprionWidget> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(widget.parentCounry,
-                                  style: const TextStyle(
-                                    fontSize: 20,
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.location_on,
                                     color: Colors.white,
-                                  )),
+                                  ),
+                                  Text(widget.parentCounry,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.white,
+                                      )),
+                                ],
+                              ),
                               const Icon(
                                 Icons.location_city,
                                 size: 35,
