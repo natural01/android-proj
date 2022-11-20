@@ -121,12 +121,16 @@ class _CityDescriprionWidgetState extends State<CityDescriprionWidget> {
                             onPressed: () {
                               setState(() {
                                 if (isFavorite == true) {
-                                  final docTown = FirebaseFirestore.instance.collection('Town').doc(widget.cityName);
-                                  docTown.update({'isFavorite':false});
+                                  final docTown = FirebaseFirestore.instance
+                                      .collection('Town')
+                                      .doc(widget.cityName);
+                                  docTown.update({'isFavorite': false});
                                   isFavorite = false;
                                 } else {
-                                  final docTown = FirebaseFirestore.instance.collection('Town').doc(widget.cityName);
-                                  docTown.update({'isFavorite':true});
+                                  final docTown = FirebaseFirestore.instance
+                                      .collection('Town')
+                                      .doc(widget.cityName);
+                                  docTown.update({'isFavorite': true});
                                   isFavorite = true;
                                 }
                               });
@@ -252,75 +256,45 @@ class _CityDescriprionWidgetState extends State<CityDescriprionWidget> {
                   const SizedBox(
                     height: 20,
                   ),
-                  const Text(
-                    'Rating & Reviews',
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w800,
-                      color: Color(0xff151a22),
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Rating & Reviews',
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xff151a22),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          addComment();
+                        },
+                        icon: const Icon(Icons.add_comment),
+                      )
+                    ],
                   ),
-                  Container(
-                    height: 200,
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: Color(0xffe8eef7),
-                    ),
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 5,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Container(
-                          margin: EdgeInsets.only(left: 10),
-                          width: 300,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    // widget.commentsAuthor ?? '',
-                                    user!.displayName
-                                        .toString(), //Дергать из бд конекретный displayName
-                                    style: const TextStyle(
-                                        fontSize: 20, color: Color(0xff8792a6)),
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.star,
-                                          color: Color(0xffffb006)),
-                                      Text(
-                                        widget.commentsRating.toString(),
-                                        style: const TextStyle(
-                                            fontSize: 15,
-                                            color: Color(0xff8792a6)),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              const Text(
-                                'A city-state located on islands in Southeast Asia, separated from the southern tip of the Malacca Peninsula by the narrow Strait of Johor. It borders with the Sultanate of Johor, which is part of Malaysia, and with the province of Riau Island, which is part of Indonesia. Singapore is considered the second safest city on Earth after Tokyo.',
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 7,
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color(0xff4a627f),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
+                  StreamBuilder<List<Comment>>(
+                      stream: readComment(widget.cityName),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return const Text('Something went wrong!');
+                        } else if (snapshot.hasData) {
+                          final comment = snapshot.data!;
+                          return Container(
+                            height: 200,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children:
+                                  comment.map(builtCommentCardWidget).toList(),
+                            ),
+                          );
+                        } else {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                      }),
                   const SizedBox(
                     height: 20,
                   ),
@@ -455,26 +429,167 @@ class _CityDescriprionWidgetState extends State<CityDescriprionWidget> {
       ),
     ));
   }
+
+  Widget builtCommentCardWidget(Comment comment) => CommentCardWidget(
+        comment.comment,
+        comment.rating,
+        comment.userName,
+        comment.townName,
+      );
+
+  Widget builtCafeCardWidget(Cafe cafe) => RestaurantsWidget(
+        description: cafe.descriotion,
+        name: cafe.name,
+        picture: cafe.picture,
+      );
+
+  Widget builtHotleCardWidget(Hotel hotel) => HotelCardWidget(
+        description: hotel.descriotion,
+        name: hotel.name,
+        picture: hotel.picture,
+        rating: hotel.rating,
+      );
+
+  Widget builtAttractionCardWidget(Attraction attraction) => AttractionWidget(
+        description: attraction.descriotion,
+        name: attraction.name,
+        picture: attraction.picture,
+      );
+
+  Future<void> addComment() async {
+    final User? user = fAuth.currentUser;
+    final docComment = FirebaseFirestore.instance.collection('Note Comment');
+    TextEditingController _commentController = TextEditingController();
+    TextEditingController _ratingController = TextEditingController();
+    String _comment = '';
+    String _rating = '';
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Comment'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                const Text('Enter your comment'),
+                TextField(
+                  controller: _commentController,
+                  obscureText: false,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.black54,
+                  ),
+                  decoration: const InputDecoration(
+                      hintText: 'Enter a comment',
+                      focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.black, width: 3)),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.black, width: 1)),
+                      hintStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.black)),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextField(
+                  controller: _ratingController,
+                  obscureText: false,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.black54,
+                  ),
+                  decoration: const InputDecoration(
+                      hintText: 'Enter a rating',
+                      focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.black, width: 3)),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.black, width: 1)),
+                      hintStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.black)),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+                child: const Text('Approve'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  FirebaseFirestore.instance.collection('Note comment').add({
+                    'Comment': _commentController.text,
+                    'Rating': _ratingController.text,
+                    'Town': widget.cityName,
+                    'UserName': user!.displayName,
+                  });
+                }),
+          ],
+        );
+      },
+    );
+  }
+
+  Container CommentCardWidget(
+      String? commentaty, String? rating, String? userName, String? townName) {
+    return Container(
+        height: 200,
+        margin: const EdgeInsets.only(right: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: const Color(0xffe8eef7),
+        ),
+        child: SizedBox(
+          width: 300,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    userName!,
+                    style:
+                        const TextStyle(fontSize: 20, color: Color(0xff8792a6)),
+                  ),
+                  Row(
+                    children: [
+                      const Icon(Icons.star, color: Color(0xffffb006)),
+                      Text(
+                        rating.toString(),
+                        style: const TextStyle(
+                            fontSize: 15, color: Color(0xff8792a6)),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                commentaty!,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 7,
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xff4a627f),
+                ),
+              ),
+            ],
+          ),
+        ));
+  }
 }
-
-Widget builtCafeCardWidget(Cafe cafe) => RestaurantsWidget(
-      description: cafe.descriotion,
-      name: cafe.name,
-      picture: cafe.picture,
-    );
-
-Widget builtHotleCardWidget(Hotel hotel) => HotelCardWidget(
-      description: hotel.descriotion,
-      name: hotel.name,
-      picture: hotel.picture,
-      rating: hotel.rating,
-    );
-
-Widget builtAttractionCardWidget(Attraction attraction) => AttractionWidget(
-      description: attraction.descriotion,
-      name: attraction.name,
-      picture: attraction.picture,
-    );
 
 class HotelCardWidget extends StatelessWidget {
   final description;

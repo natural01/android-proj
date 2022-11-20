@@ -1,13 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
-final FirebaseAuth auth = FirebaseAuth.instance;
-
-User? inputData() {
-  final User? user = auth.currentUser;
-  final uid = user?.uid;
-  return user;
-}
 
 Stream<List<Country>> readCountry() => FirebaseFirestore.instance
     .collection('Country')
@@ -28,7 +19,7 @@ Stream<List<Town>> readFavoriteCities() => FirebaseFirestore.instance
     .where('isFavorite', isEqualTo: true)
     .snapshots()
     .map((snapshot) =>
-      snapshot.docs.map((doc) => Country.fromJsonTown(doc.data())).toList());
+        snapshot.docs.map((doc) => Country.fromJsonTown(doc.data())).toList());
 
 Stream<List<Hotel>> readHotel(String townName) => FirebaseFirestore.instance
     .collection('Hotel')
@@ -52,6 +43,35 @@ Stream<List<Attraction>> readAttraction(String townName) =>
         .map((snapshot) => snapshot.docs
             .map((doc) => Attraction.fromJsonAttraction(doc.data()))
             .toList());
+
+Stream<List<Comment>> readComment(String townName) => FirebaseFirestore.instance
+    .collection('Note comment')
+    .where('Town', isEqualTo: townName)
+    .snapshots()
+    .map((snapshot) => snapshot.docs
+        .map((doc) => Comment.fromJsonComment(doc.data()))
+        .toList());
+
+class Comment {
+  final String? comment;
+  final String? rating;
+  final String? townName;
+  final String? userName;
+
+  Comment({
+    required this.comment,
+    required this.rating,
+    required this.townName,
+    required this.userName,
+  });
+
+  static Comment fromJsonComment(Map<String, dynamic> json) => Comment(
+        comment: json['Comment'] ?? '',
+        rating: json['Rating'] ?? '',
+        townName: json['Town'] ?? '',
+        userName: json['UserName'] ?? '',
+      );
+}
 
 class Hotel {
   final String? descriotion;
@@ -169,10 +189,9 @@ class Country {
       );
 
   static Town fromJsonTown(Map<String, dynamic> json) => Town(
-        description: json['Description'] ?? '',
-        idCountry: json['Id country'] ?? '',
-        name: json['Name'] ?? '',
-        pucture: json['Picture'] ?? '',
-        isFavorite: json['isFavorite'] ?? false
-      );
+      description: json['Description'] ?? '',
+      idCountry: json['Id country'] ?? '',
+      name: json['Name'] ?? '',
+      pucture: json['Picture'] ?? '',
+      isFavorite: json['isFavorite'] ?? false);
 }
