@@ -70,6 +70,7 @@ class _CityDescriprionWidgetState extends State<CityDescriprionWidget> {
   double valueHotel = 0.0;
   double valueRest = 0.0;
   double valueAttract = 0.0;
+  final User? user = fAuth.currentUser;
   bool isFavorite = false;
 
   @override
