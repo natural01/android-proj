@@ -38,7 +38,7 @@ Stream<List<Cafe>> readCafe(String townName) => FirebaseFirestore.instance
 Stream<List<Attraction>> readAttraction(String townName) =>
     FirebaseFirestore.instance
         .collection('Sight')
-        .where('Id town', isEqualTo: townName)
+        .where('Id Town', isEqualTo: townName)
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map((doc) => Attraction.fromJsonAttraction(doc.data()))
