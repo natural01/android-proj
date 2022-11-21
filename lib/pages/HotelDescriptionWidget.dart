@@ -1,5 +1,7 @@
 import 'package:data_bases_project/database/database.dart';
+import 'package:data_bases_project/pages/testDataPage.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class GetBoxOffset extends StatefulWidget {
   final Widget child;
@@ -37,14 +39,16 @@ class _GetBoxOffsetState extends State<GetBoxOffset> {
 }
 
 class HotelDescriprionWidget extends StatefulWidget {
-  const HotelDescriprionWidget(
-      {required this.HotelName,
-        required this.descriprion,
-        required this.imageURL,
-      });
+  const HotelDescriprionWidget({
+    required this.HotelName,
+    required this.descriprion,
+    required this.imageURL,
+    required this.townName,
+  });
   final HotelName;
   final descriprion;
   final imageURL;
+  final townName;
 
   @override
   State<HotelDescriprionWidget> createState() => _HotelDescriprionWidgetState();
@@ -67,7 +71,7 @@ class _HotelDescriprionWidgetState extends State<HotelDescriprionWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffe8dfe2),
+        backgroundColor: Color(0xffe8dfe2),
         body: SingleChildScrollView(
           controller: scrollController,
           child: Container(
@@ -75,76 +79,103 @@ class _HotelDescriprionWidgetState extends State<HotelDescriprionWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  height: 180,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(Icons.arrow_back),
-                        color: Colors.white,
-                      ),
-                    ],
-                  ),
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: NetworkImage(widget.imageURL),
-                          fit: BoxFit.cover)),
-                ),
-                Container(
-                  height: 40,
-                  padding: EdgeInsets.symmetric(horizontal: 5),
-                  color: Colors.white,
-                  width: double.infinity,
-                  child: Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          widget.HotelName,
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.normal,
-                            color: Color(0xff151a22),
-                          ),
-                        ),
-                        Container(
-                          child: Column(
+                    height: 300,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        image: DecorationImage(
+                            image: NetworkImage(widget.imageURL),
+                            fit: BoxFit.cover)),
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 20, horizontal: 15),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              IconButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                icon: const Icon(
+                                  Icons.arrow_back,
+                                  size: 35,
+                                ),
+                                color: Colors.white,
+                              ),
                               Row(
                                 children: const [
-                                  Icon(Icons.star, color: Color(0xffffb006)),
-                                  Text('5', style: TextStyle(color: Color(0xffffb006))),
+                                  Text(
+                                    '5',
+                                    style: TextStyle(
+                                      fontSize: 25,
+                                      color: Color(0xffffb006),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.star,
+                                    color: Color(0xffffb006),
+                                    size: 30,
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.HotelName,
+                                style: const TextStyle(
+                                  fontSize: 30,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.location_on,
+                                        color: Colors.white,
+                                      ),
+                                      Text(context.watch<Data>().getData,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                            color: Colors.white,
+                                          )),
+                                    ],
+                                  ),
                                 ],
                               ),
-                            ]
-                          ),
-                        )
-                      ],
-                    )
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Row(
-                    children: const [
-                      Icon(Icons.place, size: 10),
-                      Text(
-                        'ул. Пушкина, д. Колотушкина',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black45,
-                        ),
+                              Row(
+                                children: [
+                                  const Icon(
+                                    Icons.location_city,
+                                    size: 35,
+                                    color: Colors.white,
+                                  ),
+                                  Text(widget.townName,
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.white,
+                                      )),
+                                ],
+                              )
+                            ],
+                          )
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
+                    )),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   color: Colors.white,
@@ -195,7 +226,8 @@ class _HotelDescriprionWidgetState extends State<HotelDescriprionWidget> {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
                           color: Color(0xffe8eef7),
@@ -231,10 +263,10 @@ class _HotelDescriprionWidgetState extends State<HotelDescriprionWidget> {
 }
 
 Widget builtHotleCardWidget(Hotel hotel) => HotelCardWidget(
-  description: hotel.descriotion,
-  name: hotel.name,
-  picture: hotel.picture,
-);
+      description: hotel.descriotion,
+      name: hotel.name,
+      picture: hotel.picture,
+    );
 
 class HotelCardWidget extends StatelessWidget {
   final description;
@@ -256,7 +288,7 @@ class HotelCardWidget extends StatelessWidget {
         width: 140,
         decoration: BoxDecoration(
           image:
-          DecorationImage(image: NetworkImage(picture), fit: BoxFit.cover),
+              DecorationImage(image: NetworkImage(picture), fit: BoxFit.cover),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
@@ -296,7 +328,7 @@ class HotelCardWidget extends StatelessWidget {
                         ),
                       ),
                       backgroundColor:
-                      MaterialStateProperty.all(Colors.black12)),
+                          MaterialStateProperty.all(Colors.black12)),
                   child: const Text('More'),
                 )
               ],
@@ -313,9 +345,9 @@ class IncludedIconWidget extends StatelessWidget {
   double value;
   IncludedIconWidget(
       {required this.icon,
-        required this.name,
-        required this.scrollController,
-        required this.value});
+      required this.name,
+      required this.scrollController,
+      required this.value});
 
   @override
   Widget build(BuildContext context) {

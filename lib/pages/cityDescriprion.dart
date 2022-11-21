@@ -448,6 +448,7 @@ class _CityDescriprionWidgetState extends State<CityDescriprionWidget> {
         name: hotel.name,
         picture: hotel.picture,
         rating: hotel.rating,
+        townName: widget.cityName,
       );
 
   Widget builtAttractionCardWidget(Attraction attraction) => AttractionWidget(
@@ -596,11 +597,13 @@ class HotelCardWidget extends StatelessWidget {
   final name;
   final picture;
   final rating;
+  final townName;
   const HotelCardWidget({
     required this.description,
     required this.name,
     required this.picture,
     required this.rating,
+    required this.townName,
     Key? key,
   });
 
@@ -655,6 +658,7 @@ class HotelCardWidget extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) => HotelDescriprionWidget(
+                                  townName: townName,
                                   imageURL: picture,
                                   descriprion: description,
                                   HotelName: name,
