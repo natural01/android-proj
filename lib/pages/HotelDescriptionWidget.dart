@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data_bases_project/database/database.dart';
 import 'package:data_bases_project/pages/testDataPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../login/services/authServ.dart';
 
 class GetBoxOffset extends StatefulWidget {
   final Widget child;
@@ -182,6 +186,44 @@ class _HotelDescriprionWidgetState extends State<HotelDescriprionWidget> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Rating & Reviews',
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.w800,
+                              color: Color(0xff151a22),
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              addComment();
+                            },
+                            icon: const Icon(Icons.add_comment),
+                          )
+                        ],
+                      ),
+                      StreamBuilder<List<Comment>>(
+                          stream: readHotelComment(widget.HotelName),
+                          builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return const Text('Something went wrong!');
+                            } else if (snapshot.hasData) {
+                              final comment = snapshot.data!;
+                              return SizedBox(
+                                height: 200,
+                                child: ListView(
+                                  scrollDirection: Axis.horizontal,
+                                  children:
+                                  comment.map(builtCommentCardWidget).toList(),
+                                ),
+                              );
+                            } else {
+                              return const Center(child: CircularProgressIndicator());
+                            }
+                          }),
                       const Text(
                         'Description',
                         style: TextStyle(
@@ -259,6 +301,144 @@ class _HotelDescriprionWidgetState extends State<HotelDescriprionWidget> {
             ),
           ),
         ));
+  }
+
+  Widget builtCommentCardWidget(Comment comment) => CommentCardWidget(
+    comment.comment,
+    comment.rating,
+    comment.userName,
+    comment.Name,
+  );
+
+  Container CommentCardWidget(
+      String? commentaty, String? rating, String? userName, String? townName) {
+    return Container(
+        height: 200,
+        margin: const EdgeInsets.only(right: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: const Color(0xffe8eef7),
+        ),
+        child: SizedBox(
+          width: 300,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    userName!,
+                    style:
+                    const TextStyle(fontSize: 20, color: Color(0xff8792a6)),
+                  ),
+                  Row(
+                    children: [
+                      const Icon(Icons.star, color: Color(0xffffb006)),
+                      Text(
+                        rating.toString(),
+                        style: const TextStyle(
+                            fontSize: 15, color: Color(0xff8792a6)),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                commentaty!,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 7,
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xff4a627f),
+                ),
+              ),
+            ],
+          ),
+        ));
+  }
+
+  Future<void> addComment() async {
+    final User? user = fAuth.currentUser;
+    TextEditingController _commentController = TextEditingController();
+    TextEditingController _ratingController = TextEditingController();
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Comment'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                const Text('Enter your comment'),
+                TextField(
+                  controller: _commentController,
+                  obscureText: false,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.black54,
+                  ),
+                  decoration: const InputDecoration(
+                      hintText: 'Enter a comment',
+                      focusedBorder: OutlineInputBorder(
+                          borderSide:
+                          BorderSide(color: Colors.black, width: 3)),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide:
+                          BorderSide(color: Colors.black, width: 1)),
+                      hintStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.black)),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextField(
+                  controller: _ratingController,
+                  obscureText: false,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.black54,
+                  ),
+                  decoration: const InputDecoration(
+                      hintText: 'Enter a rating',
+                      focusedBorder: OutlineInputBorder(
+                          borderSide:
+                          BorderSide(color: Colors.black, width: 3)),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide:
+                          BorderSide(color: Colors.black, width: 1)),
+                      hintStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          color: Colors.black)),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+                child: const Text('Approve'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  FirebaseFirestore.instance.collection('Hotel comment').add({
+                    'Comment': _commentController.text,
+                    'Rating': _ratingController.text,
+                    'Hotel': widget.HotelName,
+                    'UserName': user!.displayName,
+                  });
+                }),
+          ],
+        );
+      },
+    );
   }
 }
 

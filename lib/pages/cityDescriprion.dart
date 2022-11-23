@@ -345,7 +345,7 @@ class _CityDescriprionWidgetState extends State<CityDescriprionWidget> {
         comment.comment,
         comment.rating,
         comment.userName,
-        comment.townName,
+        comment.Name,
       );
 
   Widget builtCafeCardWidget(Cafe cafe) => RestaurantsWidget(

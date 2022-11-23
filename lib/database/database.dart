@@ -52,25 +52,40 @@ Stream<List<Comment>> readComment(String townName) => FirebaseFirestore.instance
         .map((doc) => Comment.fromJsonComment(doc.data()))
         .toList());
 
+Stream<List<Comment>> readHotelComment(String hotelName) => FirebaseFirestore.instance
+    .collection('Hotel comment')
+    .where('Hotel', isEqualTo: hotelName)
+    .snapshots()
+    .map((snapshot) => snapshot.docs
+    .map((doc) => Comment.fromJsonHotelComment(doc.data()))
+    .toList());
+
 class Comment {
   final String? comment;
   final String? rating;
-  final String? townName;
+  final String? Name;
   final String? userName;
 
   Comment({
     required this.comment,
     required this.rating,
-    required this.townName,
+    required this.Name,
     required this.userName,
   });
 
   static Comment fromJsonComment(Map<String, dynamic> json) => Comment(
         comment: json['Comment'] ?? '',
         rating: json['Rating'] ?? '',
-        townName: json['Town'] ?? '',
+        Name: json['Town'] ?? '',
         userName: json['UserName'] ?? '',
       );
+
+  static Comment fromJsonHotelComment(Map<String, dynamic> json) => Comment(
+    comment: json['Comment'] ?? '',
+    rating: json['Rating'] ?? '',
+    Name: json['Hotel'] ?? '',
+    userName: json['UserName'] ?? '',
+  );
 }
 
 class Hotel {
