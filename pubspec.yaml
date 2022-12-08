@@ -43,6 +43,7 @@ dependencies:
   firebase_storage: ^11.0.4
   firebase_messaging: ^14.0.4
   firebase_core: ^2.1.1
+  bloc: ^8.1.0
 
 dev_dependencies:
   flutter_test:

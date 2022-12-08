@@ -190,13 +190,6 @@ class Country {
     required this.name,
   });
 
-  // Map<String, dynamic> toJson() => {
-  //       'Description': description,
-  //       'Id part': idPart,
-  //       'Name': name,
-  //       'Picture': imgURl,
-  //     };
-
   static Country fromJsonCountry(Map<String, dynamic> json) => Country(
         description: json['Description'] ?? '',
         idPart: json['Id part'] ?? '',
